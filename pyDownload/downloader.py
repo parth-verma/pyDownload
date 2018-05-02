@@ -3,7 +3,10 @@ import itertools
 import os
 import shutil
 import threading
-from urllib.parse import urlparse
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 
 import requests
 from utils import int_or_none, make_head_req
