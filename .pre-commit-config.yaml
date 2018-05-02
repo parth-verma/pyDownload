@@ -11,6 +11,7 @@ repos:
     -   id: autopep8-wrapper
     -   id: check-ast
     -   id: flake8
+        args: [--max-line-length=100]
     -   id: requirements-txt-fixer
     -   id: trailing-whitespace
     -   id: trailing-whitespace
