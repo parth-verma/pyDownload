@@ -3,15 +3,14 @@ import itertools
 import os
 import shutil
 import threading
-try:
-    from urllib.parse import urlparse
-except ImportError:
-    from urlparse import urlparse
 
 import requests
 from utils import int_or_none, make_head_req
 
-file_names = []
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 
 
 class Downloader:
@@ -112,4 +111,3 @@ if __name__ == "__main__":
     threads = 10
     url = "https://raw.githubusercontent.com/ambv/black/master/.flake8"
     d = Downloader(url, filename="ads")
-    # d.manager.join()
