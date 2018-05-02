@@ -13,31 +13,53 @@ except ImportError:
     from urlparse import urlparse
 
 
-class Downloader:
+class PyDownloader:
+    def get_bytes_downloaded(self):
+        return self._bytes_downloaded
+
+    def get_download_size(self):
+        return self._download_size
+
+    def get_thread_num(self):
+        return self
+
+    def is_running(self):
+        return self._running
+
+    def start_download(self):
+        if self._running is False:
+            self.manager.start()
+
+    def get_download_url(self):
+        return self.url
+
+    def set_thread_count(self, thread_count):
+        if self._running is False:
+            self._thread_num = thread_count
 
     def _download_spliter(self):
         last = 0
-        if self.download_size < self.threads:
-            self.threads = self.download_size
+        if self._download_size < self._thread_num:
+            self._thread_num = self._download_size
         for i in range(threads):
-            split_size = (self.download_size - last) // (self.threads - i)
+            split_size = (self._download_size - last) // (self._thread_num - i)
             yield (last, int(last + split_size) - 1)
             last = last + split_size
 
     def __init__(
         self, url, filename=None, threads=10, chunk_size=1024, auto_start=True, multithreaded=True
     ):
-        self.is_running = False
+        self._running = False
         self._multithreaded = multithreaded
         self._intermediate_files = []
-        self.bytes_downloaded = 0
+        self._bytes_downloaded = 0
         download_meta_data = make_head_req(url)
         self.url = download_meta_data.url
         download_headers = download_meta_data.headers
-        self.download_size = int_or_none(
+        self._download_size = int_or_none(
             download_headers.get("Content-Length"))
         self.is_gzip = download_headers.get("Content-Encoding") == "gzip"
-        if self.download_size is None:
+        if self._download_size is None:
             self._multithreaded = False
         if filename is None:
             self.filename = [i for i in urlparse(
@@ -45,14 +67,14 @@ class Downloader:
         else:
             self.filename = str(filename)
         if self._multithreaded:
-            self.threads = threads
+            self._thread_num = threads
             self._range_iterator = self._download_spliter()
             self._range_iterator, self._range_list = itertools.tee(
                 self._range_iterator)
             self._range_list = list(self._range_list)
         self.chunk_size = chunk_size
+        self.manager = threading.Thread(target=self.download_manager)
         if auto_start:
-            self.manager = threading.Thread(target=self.download_manager)
             self.manager.start()
 
     def _download_thread(self, thread_id, range_start=None, range_end=None):
@@ -67,7 +89,7 @@ class Downloader:
                     i += 1
                     if chunk:
                         f.write(chunk)
-                        self.bytes_downloaded += len(chunk)
+                        self._bytes_downloaded += len(chunk)
         self._intermediate_files.append(
             "%s-%s.part" % (self.filename, thread_id))
 
@@ -88,6 +110,7 @@ class Downloader:
             os.rename(self.filename + ".temp", self.filename)
 
     def download_manager(self):
+        self._running = True
         self.running_threads = []
         if self._multithreaded is True:
             for thread_num, down_range in zip(range(10), self._range_iterator):
@@ -110,4 +133,4 @@ if __name__ == "__main__":
     filename = "a.txt"
     threads = 10
     url = "https://raw.githubusercontent.com/ambv/black/master/.flake8"
-    d = Downloader(url, filename="ads")
+    d = PyDownloader(url, filename="ads")
