@@ -9,4 +9,4 @@ def int_or_none(n):
 
 
 def make_head_req(url):
-    return requests.head(url)
+    return requests.head(url, allow_redirects=True)
