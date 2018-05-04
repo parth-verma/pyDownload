@@ -11,7 +11,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 
 setup(
-    name='pyParallelDownloader',  # Required
+    name='pyDownload',  # Required
     version='0.0.1.dev1',  # Required
     description='A simple package for multithreaded downloading',  # Required
     long_description=long_description,  # Optional
