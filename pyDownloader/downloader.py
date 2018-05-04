@@ -14,29 +14,40 @@ except ImportError:
 
 
 class PyDownloader:
-    def get_file_name(self):
+    @property
+    def file_name(self):
         return self.filename
 
-    def get_bytes_downloaded(self):
+    @property
+    def bytes_downloaded(self):
         return self._bytes_downloaded
 
-    def get_download_size(self):
+    @property
+    def download_size(self):
         return self._download_size
 
-    def get_thread_num(self):
-        return self
+    @property
+    def thread_num(self):
+        return self._thread_num
 
+    @property
     def is_running(self):
         return self._running
 
-    def start_download(self):
+    def start_download(self, wait_for_download=True):
+        if self._wait_for_download is True:
+            self._wait_for_download = wait_for_download
         if self._running is False:
             self.manager.start()
+            if self._wait_for_download:
+                self.manager.join()
 
-    def get_download_url(self):
+    @property
+    def download_url(self):
         return self.url
 
-    def set_thread_count(self, thread_count):
+    @thread_num.setter
+    def thread_num(self, thread_count):
         if self._running is False:
             self._thread_num = thread_count
 
@@ -50,8 +61,16 @@ class PyDownloader:
             last = last + split_size
 
     def __init__(
-        self, url, filename=None, threads=10, chunk_size=1024, auto_start=True, multithreaded=True
+        self,
+        url,
+        filename=None,
+        threads=10,
+        chunk_size=1024,
+        auto_start=True,
+        multithreaded=True,
+        wait_for_download=True
     ):
+
         self._running = False
         self._multithreaded = multithreaded
         self._intermediate_files = []
@@ -79,6 +98,9 @@ class PyDownloader:
         self.manager = threading.Thread(target=self.download_manager)
         if auto_start:
             self.manager.start()
+            self._wait_for_download = wait_for_download
+            if self._wait_for_download:
+                self.manager.join()
 
     def _download_thread(self, thread_id, range_start=None, range_end=None):
         if range_start is not None and range_end is not None:
@@ -130,6 +152,7 @@ class PyDownloader:
             self._download_thread(thread_id=0)
         self.merge_downloads()
         self.uncompress_if_gzip()
+        self._running = False
 
 
 if __name__ == "__main__":
