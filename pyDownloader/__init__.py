@@ -1,1 +1,1 @@
-from downloader import PyDownloader  # noqa: F401
+from .downloader import PyDownloader  # noqa: F401

@@ -5,7 +5,8 @@ import shutil
 import threading
 
 import requests
-from utils import int_or_none, make_head_req
+
+from .utils import int_or_none, make_head_req
 
 try:
     from urllib.parse import urlparse
@@ -55,7 +56,7 @@ class PyDownloader:
         last = 0
         if self._download_size < self._thread_num:
             self._thread_num = self._download_size
-        for i in range(threads):
+        for i in range(self._thread_num):
             split_size = (self._download_size - last) // (self._thread_num - i)
             yield (last, int(last + split_size) - 1)
             last = last + split_size
