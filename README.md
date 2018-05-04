@@ -2,8 +2,18 @@
 
 This package aims to provide the functionality to download large files from the internet using chunked and multithreaded downloads.
 
+# Index
+ - [Installation](#installation)
+ - [Usage](#usage)
+ - [SayThanks](#saythanks)
 
-## Usage
+# Installation
+
+```
+pip install pydownload
+```
+
+# Usage
 
 ```
 import time
@@ -15,3 +25,7 @@ if downloader.is_running():
     time.sleep(1)
 print('File downloaded to %s' % downloader.get_file_name())
 ```
+
+# SayThanks
+
+You can thanks the team [here](https://saythanks.io/to/party98).
