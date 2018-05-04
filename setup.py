@@ -11,8 +11,8 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 
 setup(
-    name='pyDownloader',  # Required
-    version='0.0.1.dev0',  # Required
+    name='pyParallelDownloader',  # Required
+    version='0.0.1.dev1',  # Required
     description='A simple package for multithreaded downloading',  # Required
     long_description=long_description,  # Optional
     long_description_content_type='text/markdown',  # Optional (see note above)
@@ -22,7 +22,7 @@ setup(
     classifiers=[  # Optional
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU Affero General Public License v3.0',
+        'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
@@ -33,7 +33,7 @@ setup(
     keywords='downloading multithreaded parallel multithreading multithreaded-downloading download',  # Optional
     packages=find_packages(
         exclude=['contrib', 'docs', 'tests', '.*', 'requirements.txt']),  # Required
-    install_requires=['requests>=2.18.4'],  # Optional
+    install_requires=['requests>=2.0.0'],  # Optional
     extras_require={  # Optional
         'dev': ['pre-commit==1.8.2'],
         'test': [''],
