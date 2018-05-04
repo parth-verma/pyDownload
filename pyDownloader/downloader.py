@@ -14,6 +14,9 @@ except ImportError:
 
 
 class PyDownloader:
+    def get_file_name(self):
+        return self.filename
+
     def get_bytes_downloaded(self):
         return self._bytes_downloaded
 
