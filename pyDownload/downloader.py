@@ -36,8 +36,7 @@ class Downloader:
         return self._running
 
     def start_download(self, wait_for_download=True):
-        if self._wait_for_download is True:
-            self._wait_for_download = wait_for_download
+        self._wait_for_download = wait_for_download
         if self._running is False:
             self.manager.start()
             if self._wait_for_download:
@@ -97,9 +96,9 @@ class Downloader:
             self._range_list = list(self._range_list)
         self.chunk_size = chunk_size
         self.manager = threading.Thread(target=self.download_manager)
+        self._wait_for_download = wait_for_download
         if auto_start:
             self.manager.start()
-            self._wait_for_download = wait_for_download
             if self._wait_for_download:
                 self.manager.join()
 
