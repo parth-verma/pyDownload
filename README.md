@@ -5,7 +5,7 @@ This package aims to provide the functionality to download large files from the 
 # Index
  - [Installation](#installation)
  - [Usage](#usage)
- - [Developer's Guide](#Developer's Guide)
+ - [Developer Guide](#developer-guide)
  - [SayThanks](#saythanks)
 
 # Installation
@@ -27,7 +27,7 @@ if downloader.is_running():
 print('File downloaded to %s' % downloader.get_file_name())
 ```
 
-# Developer's Guide
+# Developer Guide
 
 ## Setting Up The Environment
  - ### Setup VirtualEnv (Recommended But Optional)
@@ -65,4 +65,4 @@ print('File downloaded to %s' % downloader.get_file_name())
 
 # SayThanks
 
-You can thanks the team [here](https://saythanks.io/to/party98).
+You can thank the team [here](https://saythanks.io/to/party98).
