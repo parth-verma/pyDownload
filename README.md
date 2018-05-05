@@ -9,13 +9,13 @@ This package aims to provide the functionality to download large files from the 
 
 # Installation
 
-```
+```bash
 pip install pydownload
 ```
 
 # Usage
 
-```
+```python
 import time
 from pyDownload import Downloader
 
