@@ -23,7 +23,7 @@ url = 'https://github.com/party98/Python-Parallel-Downloader/archive/master.zip'
 downloader = Downloader(url=url, filename=filename)
 if downloader.is_running:
     time.sleep(1)
-print('File downloaded to %s' % downloader.get_file_name)
+print('File downloaded to %s' % downloader.file_name)
 ```
 
 # SayThanks
