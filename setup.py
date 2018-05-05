@@ -12,7 +12,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='pyDownload',  # Required
-    version='0.0.1.dev1',  # Required
+    version='0.0.1.dev2',  # Required
     description='A simple package for multithreaded downloading',  # Required
     long_description=long_description,  # Optional
     long_description_content_type='text/markdown',  # Optional (see note above)
