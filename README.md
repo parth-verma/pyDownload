@@ -5,6 +5,7 @@ This package aims to provide the functionality to download large files from the 
 # Index
  - [Installation](#installation)
  - [Usage](#usage)
+ - [Developer's Guide](#Developer's Guide)
  - [SayThanks](#saythanks)
 
 # Installation
@@ -25,6 +26,42 @@ if downloader.is_running():
     time.sleep(1)
 print('File downloaded to %s' % downloader.get_file_name())
 ```
+
+# Developer's Guide
+
+## Setting Up The Environment
+ - ### Setup VirtualEnv (Recommended But Optional)
+   ```bash
+   pip install virtualenv
+   virtualenv env
+   source ./env/bin/activate
+   ```
+ - ### Install Dependencies
+   ```bash
+   pip install -r requirements.txt
+   ```
+ -  ### Install pre-commit hooks
+    The project uses various pre-commit hooks to enforce code quality and standards. Therefore, it is really necessary for all the contributors to install these and run before every commit else the contributions will be rejected.
+
+    ##### Steps
+    ```bash
+    pre-commit install
+    ```
+
+## Running Tests
+ - ### Install Dependencies
+   ```
+   pip install nose coverage
+   ```
+ - ### Run the Tests
+   - #### With Coverage Report (Recommended)
+     ```
+     nosetests --cover-erase --cover-package=pyDownload --with-coverage --cover-branches
+     ```
+   - #### Without Coverage Report
+     ```
+     nosetests --cover-erase --cover-package=pyDownload  --cover-branches
+     ```
 
 # SayThanks
 
