@@ -52,7 +52,7 @@ print('File downloaded to %s' % downloader.file_name)
 
 ## Running Tests
  - ### Install Dependencies
-   ```
+   ```bash
    pip install nose coverage
    ```
  - ### Run the Tests
