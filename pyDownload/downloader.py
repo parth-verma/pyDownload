@@ -50,6 +50,10 @@ class Downloader:
     def thread_num(self, thread_count):
         if self._running is False:
             self._thread_num = thread_count
+            self._range_iterator = self._download_spliter()
+            self._range_iterator, self._range_list = itertools.tee(
+                self._range_iterator)
+            self._range_list = list(self._range_list)
 
     def _download_spliter(self):
         last = 0

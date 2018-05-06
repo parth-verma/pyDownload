@@ -21,11 +21,13 @@ import time
 from pyDownload import Downloader
 
 url = 'https://github.com/party98/Python-Parallel-Downloader/archive/master.zip'
-downloader = Downloader(url=url, filename=filename)
+downloader = Downloader(url=url)
 if downloader.is_running:
     time.sleep(1)
 print('File downloaded to %s' % downloader.file_name)
 ```
+
+
 
 # Developer Guide
 
@@ -62,6 +64,7 @@ print('File downloaded to %s' % downloader.file_name)
      ```
      nosetests --cover-erase --cover-package=pyDownload  --cover-branches
      ```
+
 
 # SayThanks
 
