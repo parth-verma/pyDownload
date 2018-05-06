@@ -17,7 +17,7 @@ except ImportError:
 class Downloader:
     @property
     def file_name(self):
-        return self._filename
+        return self._get_filename()
 
     @file_name.setter
     def file_name(self, filename):
@@ -86,6 +86,12 @@ class Downloader:
             if self._wait_for_download:
                 self._manager.join()
 
+    def _get_filename(self):
+        if self._filename is None:
+            return [i for i in urlparse(
+                self._url).path.split("/") if i != ""][-1]
+        return self._filename
+
     def _download_spliter(self):
         last = 0
         if self._download_size < self._thread_num:
@@ -118,11 +124,7 @@ class Downloader:
         self.is_gzip = download_headers.get("Content-Encoding") == "gzip"
         if self._download_size is None:
             self._multithreaded = False
-        if filename is None:
-            self._filename = [i for i in urlparse(
-                self._url).path.split("/") if i != ""][-1]
-        else:
-            self._filename = str(filename)
+        self._filename = filename
         if self._multithreaded:
             self._thread_num = threads
             self._range_iterator = self._download_spliter()
@@ -138,12 +140,13 @@ class Downloader:
                 self._manager.join()
 
     def _download_thread(self, thread_id, range_start=None, range_end=None):
+        filename = self._get_filename()
         if range_start is not None and range_end is not None:
             header = {"Range": "bytes=%s-%s" % (range_start, range_end)}
         else:
             header = {}
         with requests.get(url=self._url, stream=True, headers=header) as r:
-            with open("%s-%s.part" % (self._filename, thread_id), "wb+") as f:
+            with open("%s-%s.part" % (filename, thread_id), "wb+") as f:
                 i = 0
                 for chunk in r.raw.stream(amt=self._chunk_size):
                     i += 1
@@ -151,23 +154,25 @@ class Downloader:
                         f.write(chunk)
                         self._bytes_downloaded += len(chunk)
         self._intermediate_files.append(
-            "%s-%s.part" % (self._filename, thread_id))
+            "%s-%s.part" % (filename, thread_id))
 
     def merge_downloads(self):
-        with open(self._filename + ".temp", "wb+") as f:
+        filename = self._get_filename()
+        with open(filename + ".temp", "wb+") as f:
             for part_file in sorted(self._intermediate_files):
                 with open(part_file, "rb") as r:
                     f.write(r.read())
                 os.remove(part_file)
 
     def uncompress_if_gzip(self):
+        filename = self._get_filename()
         if self.is_gzip:
-            with gzip.open(self._filename + ".temp", "rb") as f_in:
-                with open(self._filename, "wb") as f_out:
+            with gzip.open(filename + ".temp", "rb") as f_in:
+                with open(filename, "wb") as f_out:
                     shutil.copyfileobj(f_in, f_out)
-                    os.remove(self._filename + ".temp")
+                    os.remove(filename + ".temp")
         else:
-            os.rename(self._filename + ".temp", self._filename)
+            os.rename(filename + ".temp", filename)
 
     def download_manager(self):
         self._running = True
