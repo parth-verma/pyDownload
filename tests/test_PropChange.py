@@ -63,7 +63,8 @@ class testPropChange(unittest.TestCase):
             url=self.TEST_URL_1, auto_start=False, wait_for_download=False)
         self.assertFalse(download.is_running)
         self.assertEqual(download.bytes_downloaded, 0)
-        download.start_download()
+        download.start_download(wait_for_download=False)
+        time.sleep(0.5)
         while download.is_running:
             self.assertNotEqual(download.bytes_downloaded, 0)
         self.assertFalse(download.is_running)
