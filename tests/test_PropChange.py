@@ -1,4 +1,6 @@
 import os
+import shutil
+import time
 import unittest
 
 import pyDownload
@@ -7,6 +9,16 @@ import pyDownload
 class testPropChange(unittest.TestCase):
     TEST_URL_1 = 'http://ovh.net/files/1Mio.dat'
     TEST_URL_2 = 'http://ovh.net/files/1Mb.dat'
+
+    @classmethod
+    def setUpClass(cls):
+        os.mkdir('temp')
+        os.chdir('temp')
+
+    @classmethod
+    def tearDownClass(cls):
+        os.chdir('..')
+        shutil.rmtree('temp')
 
     def test_url_change(self):
         downloader = pyDownload.Downloader(
@@ -56,4 +68,19 @@ class testPropChange(unittest.TestCase):
             self.assertNotEqual(download.bytes_downloaded, 0)
         self.assertFalse(download.is_running)
         self.assertEqual(download.bytes_downloaded, download.download_size)
+        os.remove(download.file_name)
+
+    def test_misc_changes(self):
+        download = pyDownload.Downloader(
+            url=self.TEST_URL_1, auto_start=False, wait_for_download=False, multithreaded=True)
+        self.assertTrue(download.multithreaded)
+        self.assertFalse(download.wait_for_download)
+        download.start_download(wait_for_download=False)
+        download.multithreaded = False
+        self.assertTrue(download.is_running)
+        self.assertTrue(download.multithreaded)
+        download.wait_for_download = True
+        self.assertFalse(download.wait_for_download)
+        while download.is_running:
+            time.sleep(0.5)
         os.remove(download.file_name)
