@@ -40,7 +40,7 @@ print('File downloaded to %s' % downloader.file_name)
    ```
  - ### Install Dependencies
    ```bash
-   pip install -r requirements.txt
+   pip install .[dev]
    ```
  -  ### Install pre-commit hooks
     The project uses various pre-commit hooks to enforce code quality and standards. Therefore, it is really necessary for all the contributors to install these and run before every commit else the contributions will be rejected.
@@ -53,7 +53,7 @@ print('File downloaded to %s' % downloader.file_name)
 ## Running Tests
  - ### Install Dependencies
    ```bash
-   pip install nose coverage
+   pip install .[test]
    ```
  - ### Run the Tests
    - #### With Coverage Report (Recommended)

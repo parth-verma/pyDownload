@@ -36,7 +36,7 @@ setup(
     install_requires=['requests>=2.18.0'],  # Optional
     extras_require={  # Optional
         'dev': ['pre-commit==1.8.2'],
-        'test': ['nosetests,coverage'],
+        'test': ['nose', 'coverage'],
     },
     entry_points={  # Optional
         # 'console_scripts': [
