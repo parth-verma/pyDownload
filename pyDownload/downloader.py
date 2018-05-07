@@ -158,21 +158,29 @@ class Downloader(object):
             if self._wait_for_download:
                 self._manager.join()
 
-    def _download_thread(self, thread_id, range_start=None, range_end=None):
+    def _download_thread(self, thread_id, range_start=0, range_end=None):
         filename = self._get_filename()
         if range_start is not None and range_end is not None:
             header = {"Range": "bytes=%s-%s" % (range_start, range_end)}
         else:
             header = {}
         with requests.get(url=self._url, stream=True, headers=header) as r:
-            with open("%s.temp" % (filename,), "wb+") as f:
-                f.seek(range_start)
+            with open("%s-%s.part" % (filename, thread_id), "wb+") as f:
                 i = 0
                 for chunk in r.raw.stream(amt=self._chunk_size):
                     i += 1
                     if chunk:
                         f.write(chunk)
                         self._bytes_downloaded += len(chunk)
+        self._intermediate_files.append("%s-%s.part" % (filename, thread_id))
+
+    def merge_downloads(self):
+        filename = self._get_filename()
+        with open(filename + ".temp", "wb+") as f:
+            for part_file in sorted(self._intermediate_files):
+                with open(part_file, "rb") as r:
+                    f.write(r.read())
+                os.remove(part_file)
 
     def uncompress_if_gzip(self):
         filename = self._get_filename()
@@ -180,7 +188,7 @@ class Downloader(object):
             with gzip.open(filename + ".temp", "rb") as f_in:
                 with open(filename, "wb") as f_out:
                     shutil.copyfileobj(f_in, f_out)
-            os.remove(filename + ".temp")
+                    os.remove(filename + ".temp")
         else:
             os.rename(filename + ".temp", filename)
 
@@ -200,6 +208,7 @@ class Downloader(object):
                 thread.join()
         else:
             self._download_thread(thread_id=0)
+        self.merge_downloads()
         self.uncompress_if_gzip()
         self._running = False
 
