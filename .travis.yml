@@ -1,4 +1,5 @@
 language: python
+cache: pip
 python:
   - "2.6"
   - "2.7"
@@ -14,6 +15,13 @@ python:
 sudo: false
 install:
   - pip install .[test] codecov
+matrix:
+    fast_finish: true
+    allow_failures:
+        - python: "2.6"
+        - python: "2.7"
+        - python: "pypy2.7"
+        - python: "pypy3.5"
 script:
   - nosetests --cover-erase --cover-package=pyDownload  --cover-branches --with-coverage
   - codecov
