@@ -33,10 +33,10 @@ setup(
     keywords='downloading multithreaded parallel multithreading multithreaded-downloading download',  # Optional
     packages=find_packages(
         exclude=['contrib', 'docs', 'tests', '.*', 'requirements.txt']),  # Required
-    install_requires=['requests>=2.0.0'],  # Optional
+    install_requires=['requests>=2.18.0'],  # Optional
     extras_require={  # Optional
         'dev': ['pre-commit==1.8.2'],
-        'test': [''],
+        'test': ['nosetests,coverage'],
     },
     entry_points={  # Optional
         # 'console_scripts': [
