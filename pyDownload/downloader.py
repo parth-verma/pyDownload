@@ -213,8 +213,8 @@ class Downloader(object):
         self._running = False
 
 
-if __name__ == "__main__":
-    filename = "a.txt"
-    threads = 10
-    url = "https://raw.githubusercontent.com/ambv/black/master/.flake8"
-    d = Downloader(url, filename="ads")
+# if __name__ == "__main__":
+#     filename = "a.txt"
+#     threads = 10
+#     url = "https://raw.githubusercontent.com/ambv/black/master/.flake8"
+#     d = Downloader(url, filename="ads")
