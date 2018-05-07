@@ -31,7 +31,7 @@ class Downloader:
 
     @multithreaded.setter
     def multithreaded(self, value):
-        if self._running:
+        if self._running is False:
             self._is_multithreaded = value
 
     @property
