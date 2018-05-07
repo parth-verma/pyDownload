@@ -12,6 +12,7 @@ python:
   - "pypy2.7"
   - "pypy3.5"
 install:
-  - pip install .[test]
+  - pip install .[test] codecov
 script:
-  - nosetests --cover-erase --cover-package=pyDownload  --cover-branches
+  - nosetests --cover-erase --cover-package=pyDownload  --cover-branches --with-coverage
+  - codecov
