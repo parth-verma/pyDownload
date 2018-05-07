@@ -14,7 +14,7 @@ except ImportError:
     from urlparse import urlparse
 
 
-class Downloader:
+class Downloader(object):
 
     @property
     def wait_for_download(self):
