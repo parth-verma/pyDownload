@@ -15,111 +15,6 @@ except ImportError:
 
 
 class Downloader(object):
-
-    @property
-    def wait_for_download(self):
-        return self._wait_for_download
-
-    @wait_for_download.setter
-    def wait_for_download(self, value):
-        if self._running is False:
-            self._wait_for_download = value
-
-    @property
-    def multithreaded(self):
-        return self._is_multithreaded
-
-    @multithreaded.setter
-    def multithreaded(self, value):
-        if self._running is False:
-            self._is_multithreaded = value
-
-    @property
-    def file_name(self):
-        return self._get_filename()
-
-    @file_name.setter
-    def file_name(self, filename):
-        if self._running is False:
-            self._filename = filename
-
-    @property
-    def bytes_downloaded(self):
-        return self._bytes_downloaded
-
-    @property
-    def download_size(self):
-        return self._download_size
-
-    @property
-    def thread_num(self):
-        return self._thread_num
-
-    @thread_num.setter
-    def thread_num(self, thread_count):
-        if self._running is False:
-            self._thread_num = thread_count
-            self._range_iterator = self._download_spliter()
-            self._range_iterator, self._range_list = itertools.tee(
-                self._range_iterator)
-            self._range_list = list(self._range_list)
-
-    @property
-    def chunk_size(self):
-        return self._chunk_size
-
-    @chunk_size.setter
-    def chunk_size(self, chunk):
-        if self._running is False:
-            self._chunk_size = chunk
-
-    @property
-    def is_running(self):
-        return self._running
-
-    @property
-    def download_url(self):
-        return self._url
-
-    @download_url.setter
-    def download_url(self, url):
-        if self._running is False:
-            download_meta_data = make_head_req(url)
-            self._url = download_meta_data.url
-            download_headers = download_meta_data.headers
-            self._download_size = int_or_none(
-                download_headers.get("Content-Length"))
-            self.is_gzip = download_headers.get("Content-Encoding") == "gzip"
-            if self._download_size is None:
-                self._is_multithreaded = False
-            if self._is_multithreaded:
-                self._range_iterator = self._download_spliter()
-                self._range_iterator, self._range_list = itertools.tee(
-                    self._range_iterator)
-                self._range_list = list(self._range_list)
-
-    def start_download(self, wait_for_download=True):
-        self._wait_for_download = wait_for_download
-        if self._running is False:
-            self._manager.start()
-            if self._wait_for_download:
-                self._manager.join()
-
-    def _get_filename(self):
-        if self._filename is None:
-            return [i for i in urlparse(
-                self._url).path.split("/") if i != ""][-1]
-        return self._filename
-
-    def _download_spliter(self):
-        last = 0
-        if self._download_size < self._thread_num:
-            self._thread_num = self._download_size
-        for i in range(self._thread_num):
-            split_size = (self._download_size - last) // (self._thread_num - i)
-            yield (last, int(last + split_size) - 1)
-            last = last + split_size
-
     def __init__(
         self,
         url,
@@ -157,6 +52,110 @@ class Downloader(object):
             self._manager.start()
             if self._wait_for_download:
                 self._manager.join()
+
+    @property
+    def wait_for_download(self):
+        return self._wait_for_download
+
+    @wait_for_download.setter
+    def wait_for_download(self, value):
+        if self._running is False:
+            self._wait_for_download = value
+
+    @property
+    def multithreaded(self):
+        return self._is_multithreaded
+
+    @multithreaded.setter
+    def multithreaded(self, value):
+        if self._running is False:
+            self._is_multithreaded = value
+
+    @property
+    def file_name(self):
+        return self._get_filename()
+
+    @file_name.setter
+    def file_name(self, filename):
+        if self._running is False:
+            self._filename = filename
+
+    @property
+    def thread_num(self):
+        return self._thread_num
+
+    @thread_num.setter
+    def thread_num(self, thread_count):
+        if self._running is False:
+            self._thread_num = thread_count
+            self._range_iterator = self._download_spliter()
+            self._range_iterator, self._range_list = itertools.tee(
+                self._range_iterator)
+            self._range_list = list(self._range_list)
+
+    @property
+    def chunk_size(self):
+        return self._chunk_size
+
+    @chunk_size.setter
+    def chunk_size(self, chunk):
+        if self._running is False:
+            self._chunk_size = chunk
+
+    @property
+    def download_url(self):
+        return self._url
+
+    @download_url.setter
+    def download_url(self, url):
+        if self._running is False:
+            download_meta_data = make_head_req(url)
+            self._url = download_meta_data.url
+            download_headers = download_meta_data.headers
+            self._download_size = int_or_none(
+                download_headers.get("Content-Length"))
+            self.is_gzip = download_headers.get("Content-Encoding") == "gzip"
+            if self._download_size is None:
+                self._is_multithreaded = False
+            if self._is_multithreaded:
+                self._range_iterator = self._download_spliter()
+                self._range_iterator, self._range_list = itertools.tee(
+                    self._range_iterator)
+                self._range_list = list(self._range_list)
+
+    @property
+    def bytes_downloaded(self):
+        return self._bytes_downloaded
+
+    @property
+    def download_size(self):
+        return self._download_size
+
+    @property
+    def is_running(self):
+        return self._running
+
+    def start_download(self, wait_for_download=True):
+        self._wait_for_download = wait_for_download
+        if self._running is False:
+            self._manager.start()
+            if self._wait_for_download:
+                self._manager.join()
+
+    def _get_filename(self):
+        if self._filename is None:
+            return [i for i in urlparse(
+                self._url).path.split("/") if i != ""][-1]
+        return self._filename
+
+    def _download_spliter(self):
+        last = 0
+        if self._download_size < self._thread_num:
+            self._thread_num = self._download_size
+        for i in range(self._thread_num):
+            split_size = (self._download_size - last) // (self._thread_num - i)
+            yield (last, int(last + split_size) - 1)
+            last = last + split_size
 
     def _download_thread(self, thread_id, range_start=0, range_end=None):
         filename = self._get_filename()
