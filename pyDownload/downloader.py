@@ -6,7 +6,7 @@ import threading
 
 import requests
 
-from .utils import int_or_none, make_head_req
+from .utils import create_file, int_or_none, make_head_req
 
 try:
     from urllib.parse import urlparse
@@ -164,22 +164,17 @@ class Downloader(object):
         else:
             header = {}
         with requests.get(url=self._url, stream=True, headers=header) as r:
-            with open("%s-%s.part" % (filename, thread_id), "wb+") as f:
+            with open("%s.temp" % filename, "rb+") as f:
+                pos = range_start
                 i = 0
                 for chunk in r.raw.stream(amt=self._chunk_size):
                     i += 1
                     if chunk:
+                        f.seek(pos)
                         f.write(chunk)
                         self._bytes_downloaded += len(chunk)
+                        pos += len(chunk)
         self._intermediate_files.append("%s-%s.part" % (filename, thread_id))
-
-    def merge_downloads(self):
-        filename = self._get_filename()
-        with open(filename + ".temp", "wb+") as f:
-            for part_file in sorted(self._intermediate_files):
-                with open(part_file, "rb") as r:
-                    f.write(r.read())
-                os.remove(part_file)
 
     def uncompress_if_gzip(self):
         filename = self._get_filename()
@@ -194,6 +189,8 @@ class Downloader(object):
     def download_manager(self):
         self._running = True
         self.running_threads = []
+        # Create file so that we are able to open it in r+ mode
+        create_file(self._get_filename()+".temp")
         if self._is_multithreaded is True:
             for thread_num, down_range in zip(range(10), self._range_iterator):
                 t = threading.Thread(
@@ -207,7 +204,6 @@ class Downloader(object):
                 thread.join()
         else:
             self._download_thread(thread_id=0)
-        self.merge_downloads()
         self.uncompress_if_gzip()
         self._running = False
 
