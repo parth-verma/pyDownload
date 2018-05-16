@@ -4,9 +4,11 @@ This package aims to provide the functionality to download large files from the 
 
 # Index
  - [Command Line Usage](#command-line-usage)
+ - [Features](#features)
  - [Installation](#installation)
  - [Usage](#usage)
  - [Developer Guide](#developer-guide)
+ - [Bug Reporting Guide](#bug-reporting-guide)
  - [SayThanks](#saythanks)
 
 # Command Line usage
@@ -34,6 +36,12 @@ optional arguments:
                         chunk size (in bytes)
   --version             display the version of pyDownload being used
 ```
+
+# Features
+
+ - Written in pure python.
+ - Supports ability to perform multithreaded downloads from any url if the server supports.
+ - Small and concise API therefore easy to integrate in python code.
 
 # Installation
 
@@ -91,6 +99,16 @@ print('File downloaded to %s' % downloader.file_name)
      ```
      nosetests --cover-erase --cover-package=pyDownload  --cover-branches
      ```
+
+# Bug Reporting Guide
+
+You can report bugs [here](https://github.com/party98/pyDownload/issues).
+
+ - Make sure you are using the latest version. (Check by running `pyDownload --version`).
+ - Search for the issue in existing issues (open & closed) and create only if the issue is not mentioned.
+ - Fill the issue template correctly.
+
+Note: If you feel that you can fix the issue, you are more than welcome to submit a PR.
 
 
 # SayThanks
