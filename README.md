@@ -1,4 +1,4 @@
-# PyDownload
+# PyDownload [![PyPI version](https://badge.fury.io/py/pyDownload.svg)](https://badge.fury.io/py/pyDownload) [![Build Status](https://travis-ci.org/party98/pyDownload.svg?branch=master)](https://travis-ci.org/party98/pyDownload) [![codecov](https://codecov.io/gh/party98/pyDownload/branch/master/graph/badge.svg)](https://codecov.io/gh/party98/pyDownload)
 
 This package aims to provide the functionality to download large files from the internet using chunked and multithreaded downloads.
 
