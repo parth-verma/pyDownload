@@ -23,14 +23,5 @@ matrix:
   - python: pypy2.7
   - python: pypy3.5
 script:
-- nosetests --cover-erase --cover-package=pyDownload  --cover-branches --with-coverage
-- codecov
-deploy:
-  provider: pypi
-  user:
-    secure: eWiOtzAoZQlQuDenNA5JH7n757f7AR0VksInn50x82K9KSuNmgxrLFjeuGB80aKVzy88sOpZ0CbApZJyd6XfE4hBk3BxYALC9Etnrk34dlq0fJrkHLb9x2zIDzb1ux8PPPMSFDDLOaW6J7oPT188yHrvwkhw0poK+susc+saflD+KWbY0esUGT9NCxUD3MiaKiPNYon26g0CzOi2clK/d5VR2yTlW53bgKV/F2igeTFg/xieuvtdh/PZEj7U/qEbC+PNsb015+ZdEXEDoDaLPda14a5d3lCy47NeKMnHFmFbs0OXha2Tc0tFR/6RlELCRsmdvPAiTJ8GZKTVsT0VEBsVYdCzQvluoFszKFJH8/V/Zu1WzXvS+oXe/jIIn8VYMrUrgEFikQGousQZde6Q4i6cv3jPJ/l9R0WGllbOGq2azN5dneiHv4/jghloZchhZ+Vcv0cRBXbmNCqxJTzD4Wp2aw1tW/ghHrHKL+5Y0qL1lNirDN0G4nbT3n3Y9Kq3HlDr3Hd8VxfX1WqBsovRt7f9L+D3p3L5wbOwraHtoUHO6kDE8p1hmbpvOHHASVnV5QfwSMQ0mjlvayQ9Ito447l5O/kWPwN98tWr1Rdb+wNK2e4VvRhXUjuQsBrN8iAwTu2KtNzFv+pTdtZpIk6Ci1aWnOKaqgeEpzJGbFYMjvo=
-  password:
-    secure: MK1Ao9LGkMEBAcQclR1NLcDOLte5WBitk6YIraD3pUKc+rpVv9MxE7k3VkwD6hWpf+9DaCJm4bfiQWwW27gfNtQUkgwuhVgsFadxuuoi8sFIhx92tuzj6q7UQna4PxIXAjhSaNjBw0vsv6SNQgGFfsz1RqP3cRXfCLwJ5JLopxk9cba6/MSUqnTNgcGHp1BlTWXsPNRTbR+1Cu6NSC1AVGAhIbZR+VAClexBl7YTVK4bh+o4CYwcZ+Wwl3B5xjY0S4gGDBefvRFYifKMXNoG7A/CHVw9SCPaCiFtn15LWB1NAXT+xyc0eB75pa/VU0r/VCc9Ns00iKJ1qsmW1HSMvFwFSx1sLR7//vUVeVCJWi4flLijZF7rUSw1CjiggYKR9/IbzS08vz1m8XjEQiLl6Nr9XlhW7tNx4WQUjIo/kDzURUYxQkjnN4T+7V9remUdxASKnM/S/iNYPMWGbfIzNqMkirsL32kbzzXHF79xzMedxGIyYh+dl/QDAdcArHvO1Sk6o8wcukW8NBR3plghuXIxhc6KCPmPf4qECXvp/VPjTNu8uoy8V6qn/4MBPTbmt5YM7SoV5BWTJxPV4/DBm4lNt5DSgkuBJNczEMt/hRbSNhtojykheb7fHNfKjMJjHLerWnmG4z/igmjKk76s9zW8Fyi5lxTbi8rg1S1pDRY=
-  distributions: sdist bdist_wheel
-  on:
-    branch: master
+  - nosetests --cover-erase --cover-package=pyDownload  --cover-branches --with-coverage
+  - codecov
