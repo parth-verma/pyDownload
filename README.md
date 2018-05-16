@@ -9,6 +9,7 @@ This package aims to provide the functionality to download large files from the 
  - [Usage](#usage)
  - [Developer Guide](#developer-guide)
  - [Bug Reporting Guide](#bug-reporting-guide)
+ - [Contribution Guide](#contribution-guide)
  - [SayThanks](#saythanks)
 
 # Command Line usage
@@ -109,6 +110,17 @@ You can report bugs [here](https://github.com/party98/pyDownload/issues).
  - Fill the issue template correctly.
 
 Note: If you feel that you can fix the issue, you are more than welcome to submit a PR.
+
+# Contribution Guide
+
+Contributors are welcome to make this package more awesome. But before you do, make sure that you have read the following limited but important guidelines.
+
+ - Make sure that the issue that you are trying to fix exists [here](https://github.com/party98/pyDownload/issues). Create one if it does not.
+ - Make sure that you perform `flake8` checks on the code before you submit a PR.
+ - Write unittests and comments for the changes that you have made.
+ - Make sure your branch is updated with the `development` branch.
+ - All PRs should be submitted to `development` branch. PRs to any other branch will be rejected.
+ - Please install and perform `pre-commit` check on all your commits to maintain code quality
 
 
 # SayThanks
