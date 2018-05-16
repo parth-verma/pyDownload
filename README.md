@@ -32,8 +32,6 @@ optional arguments:
                         number of threads to use
   -c CHUNK_SIZE, --chunk-size CHUNK_SIZE
                         chunk size (in bytes)
-  --single-multithreaded
-                        use multithreading to download file.
   --version             display the version of pyDownload being used
 ```
 
