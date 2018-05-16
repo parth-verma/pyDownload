@@ -33,15 +33,15 @@ setup(
     keywords='downloading multithreaded parallel multithreading multithreaded-downloading download',  # Optional
     packages=find_packages(
         exclude=['contrib', 'docs', 'tests', '.*', 'requirements.txt']),  # Required
-    install_requires=['requests>=2.18.0'],  # Optional
+    install_requires=['requests>=2.18.0', 'progressbar2>=3.37.1'],  # Optional
     extras_require={  # Optional
         'dev': ['pre-commit==1.8.2'],
         'test': ['nose', 'coverage'],
     },
     entry_points={  # Optional
-        # 'console_scripts': [
-        #     'sample=sample:main',
-        # ],
+        'console_scripts': [
+            'pyDownload = pyDownload.__main__:main',
+        ],
     },
     project_urls={  # Optional
         'Bug Reports': 'https://github.com/party98/Python-Parallel-Downloader/issues',
