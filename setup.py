@@ -12,7 +12,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='pyDownload',  # Required
-    version='0.0.1.dev3',  # Required
+    version='0.0.1.dev4',  # Required
     description='A simple package for multithreaded downloading',  # Required
     long_description=long_description,  # Optional
     long_description_content_type='text/markdown',  # Optional (see note above)
@@ -33,15 +33,15 @@ setup(
     keywords='downloading multithreaded parallel multithreading multithreaded-downloading download',  # Optional
     packages=find_packages(
         exclude=['contrib', 'docs', 'tests', '.*', 'requirements.txt']),  # Required
-    install_requires=['requests>=2.0.0'],  # Optional
+    install_requires=['requests>=2.18.0', 'progressbar2>=3.37.1'],  # Optional
     extras_require={  # Optional
         'dev': ['pre-commit==1.8.2'],
-        'test': [''],
+        'test': ['nose', 'coverage'],
     },
     entry_points={  # Optional
-        # 'console_scripts': [
-        #     'sample=sample:main',
-        # ],
+        'console_scripts': [
+            'pyDownload = pyDownload.__main__:main',
+        ],
     },
     project_urls={  # Optional
         'Bug Reports': 'https://github.com/party98/Python-Parallel-Downloader/issues',
