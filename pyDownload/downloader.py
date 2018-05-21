@@ -7,6 +7,7 @@ import time
 
 import requests
 
+from .status import DownloadStatus
 from .utils import create_file, int_or_none, make_head_req
 
 try:
@@ -26,6 +27,7 @@ class Downloader(object):
         multithreaded=True,
         wait_for_download=True
     ):
+        self._status = DownloadStatus.INITIALIZING
         self._paused = False
         self._running = False
         self._is_multithreaded = multithreaded
@@ -49,10 +51,16 @@ class Downloader(object):
         self._chunk_size = chunk_size
         self._manager = threading.Thread(target=self.download_manager)
         self._wait_for_download = wait_for_download
+        self._status = DownloadStatus.READY
         if auto_start:
             self._manager.start()
+            self._status = DownloadStatus.STARTED
             if self._wait_for_download:
                 self._manager.join()
+
+    @property
+    def status(self):
+        return self._status
 
     @property
     def wait_for_download(self):
@@ -139,16 +147,19 @@ class Downloader(object):
     def pause(self):
         if self._running:
             self._paused = True
+            DownloadStatus.PAUSED
 
     def resume(self):
         if self._running and self._paused:
             print('Resuming')
             self._paused = False
+            DownloadStatus.RUNNING
 
     def start_download(self, wait_for_download=True):
         self._wait_for_download = wait_for_download
         if self._running is False:
             self._manager.start()
+            self._status = DownloadStatus.STARTED
             if self._wait_for_download:
                 self._manager.join()
 
@@ -203,6 +214,7 @@ class Downloader(object):
         self.running_threads = []
         # Create file so that we are able to open it in r+ mode
         create_file(self._get_filename()+".temp")
+        self._status = DownloadStatus.RUNNING
         if self._is_multithreaded is True:
             for thread_num, down_range in zip(range(10), self._range_iterator):
                 t = threading.Thread(
@@ -218,7 +230,7 @@ class Downloader(object):
             self._download_thread(thread_id=0)
         self.uncompress_if_gzip()
         self._running = False
-
+        self._status = DownloadStatus.FINISHED
 
 # if __name__ == "__main__":
 #     filename = "a.txt"
