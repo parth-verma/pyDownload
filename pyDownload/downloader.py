@@ -3,6 +3,7 @@ import itertools
 import os
 import shutil
 import threading
+import time
 
 import requests
 
@@ -25,7 +26,7 @@ class Downloader(object):
         multithreaded=True,
         wait_for_download=True
     ):
-
+        self._paused = False
         self._running = False
         self._is_multithreaded = multithreaded
         self._intermediate_files = []
@@ -135,6 +136,15 @@ class Downloader(object):
     def is_running(self):
         return self._running
 
+    def pause(self):
+        if self._running:
+            self._paused = True
+
+    def resume(self):
+        if self._running and self._paused:
+            print('Resuming')
+            self._paused = False
+
     def start_download(self, wait_for_download=True):
         self._wait_for_download = wait_for_download
         if self._running is False:
@@ -169,6 +179,8 @@ class Downloader(object):
                 i = 0
                 for chunk in r.raw.stream(amt=self._chunk_size):
                     i += 1
+                    while self._paused:
+                        time.sleep(1)
                     if chunk:
                         f.seek(pos)
                         f.write(chunk)
