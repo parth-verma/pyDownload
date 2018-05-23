@@ -4,16 +4,12 @@ import os
 import shutil
 import threading
 import time
+from urllib.parse import urlparse
 
 import requests
 
 from .status import DownloadStatus
 from .utils import create_file, int_or_none, make_head_req
-
-try:
-    from urllib.parse import urlparse
-except ImportError:
-    from urlparse import urlparse
 
 
 class Downloader(object):
