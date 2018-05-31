@@ -38,8 +38,8 @@ class Downloader(object):
         if self._download_size is None:
             self._is_multithreaded = False
         self._filename = filename
+        self._thread_num = threads
         if self._is_multithreaded:
-            self._thread_num = threads
             self._range_iterator = self._download_spliter()
             self._range_iterator, self._range_list = itertools.tee(
                 self._range_iterator)
@@ -62,11 +62,6 @@ class Downloader(object):
     def wait_for_download(self):
         return self._wait_for_download
 
-    @wait_for_download.setter
-    def wait_for_download(self, value):
-        if self._running is False:
-            self._wait_for_download = value
-
     @property
     def multithreaded(self):
         return self._is_multithreaded
@@ -75,6 +70,11 @@ class Downloader(object):
     def multithreaded(self, value):
         if self._running is False:
             self._is_multithreaded = value
+            if self._is_multithreaded:
+                self._range_iterator = self._download_spliter()
+                self._range_iterator, self._range_list = itertools.tee(
+                    self._range_iterator)
+                self._range_list = list(self._range_list)
 
     @property
     def file_name(self):
@@ -122,6 +122,8 @@ class Downloader(object):
             self.is_gzip = download_headers.get("Content-Encoding") == "gzip"
             if self._download_size is None:
                 self._is_multithreaded = False
+            else:
+                self._is_multithreaded = True
             if self._is_multithreaded:
                 self._range_iterator = self._download_spliter()
                 self._range_iterator, self._range_list = itertools.tee(

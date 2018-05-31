@@ -1,5 +1,5 @@
-import errno
 import os
+import shutil
 import time
 import unittest
 
@@ -8,21 +8,21 @@ from utils import md5
 
 
 class testDownload(unittest.TestCase):
-    TEST_URL = 'http://ovh.net/files/1Mio.dat'
+    TEST_URL_1 = 'http://ovh.net/files/1Mio.dat'
+    TEST_URL_2 = 'https://raw.githubusercontent.com/party98/pyDownload/development/README.md'
 
     def setUp(self):
-        pass
+        os.makedirs('temp')
+        os.chdir('temp')
 
     def tearDown(self):
-        try:
-            os.remove('1Mio.dat')
-        except OSError as e:
-            if e.errno != errno.ENOENT:  # errno.ENOENT = no such file or directory
-                raise
+        os.chdir('..')
+        shutil.rmtree('temp')
 
-    def test_Download(self):
-        download = Downloader(url=self.TEST_URL, auto_start=False)
+    def test_Download_without_gzip(self):
+        download = Downloader(url=self.TEST_URL_1, auto_start=False)
         self.assertFalse(download.is_running)
+        self.assertFalse(download.is_gzip)
         self.assertEqual(download.file_name, '1Mio.dat')
         self.assertEqual(download.download_size, 1048576)
         download.start_download()
@@ -30,8 +30,16 @@ class testDownload(unittest.TestCase):
         self.assertEqual(os.path.getsize('1Mio.dat'), 1048576)
         self.assertEqual(md5('1Mio.dat'), '6cb91af4ed4c60c11613b75cd1fc6116')
 
+    def test_Download_with_gzip(self):
+        download = Downloader(url=self.TEST_URL_2, auto_start=False)
+        self.assertFalse(download.is_running)
+        self.assertTrue(download.is_gzip)
+        self.assertEqual(download.file_name, 'README.md')
+        download.start_download()
+        self.assertTrue(os.path.exists('README.md'))
+
     def test_ThreadNumChanges(self):
-        download = Downloader(url=self.TEST_URL, auto_start=False)
+        download = Downloader(url=self.TEST_URL_1, auto_start=False)
         self.assertFalse(download.is_running)
         self.assertEqual(download.file_name, '1Mio.dat')
         self.assertEqual(download.download_size, 1048576)
@@ -41,8 +49,26 @@ class testDownload(unittest.TestCase):
         self.assertEqual(download.thread_num, 4)
         self.assertEqual(len(download._range_list), 4)
 
+    def test_auto_start_download_1(self):
+        download = Downloader(url=self.TEST_URL_1)
+        self.assertFalse(download.is_running)
+        self.assertEqual(download.file_name, '1Mio.dat')
+        self.assertEqual(download.download_size, 1048576)
+        self.assertTrue(os.path.exists('1Mio.dat'))
+
+    def test_auto_start_download_2(self):
+        download = Downloader(url=self.TEST_URL_1, wait_for_download=False)
+
+        self.assertTrue(download.is_running)
+        while(download.is_running):
+            time.sleep(1)
+        self.assertFalse(download.is_running)
+        self.assertEqual(download.file_name, '1Mio.dat')
+        self.assertEqual(download.download_size, 1048576)
+        self.assertTrue(os.path.exists('1Mio.dat'))
+
     def test_Download_pause_and_resume(self):
-        download = Downloader(url=self.TEST_URL, auto_start=False)
+        download = Downloader(url=self.TEST_URL_1, auto_start=False)
         self.assertFalse(download.is_running)
         download.pause()
         self.assertFalse(download._paused)
