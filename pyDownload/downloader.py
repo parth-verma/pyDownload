@@ -176,7 +176,7 @@ class Downloader(object):
             yield (last, int(last + split_size) - 1)
             last = last + split_size
 
-    def _download_thread(self, thread_id, range_start=0, range_end=None):
+    def _download_thread(self, range_start=0, range_end=None):
         filename = self._get_filename()
         if range_start is not None and range_end is not None:
             header = {"Range": "bytes=%s-%s" % (range_start, range_end)}
@@ -195,7 +195,6 @@ class Downloader(object):
                         f.write(chunk)
                         self._bytes_downloaded += len(chunk)
                         pos += len(chunk)
-        self._intermediate_files.append("%s-%s.part" % (filename, thread_id))
 
     def uncompress_if_gzip(self):
         filename = self._get_filename()
@@ -217,7 +216,7 @@ class Downloader(object):
             for thread_num, down_range in zip(range(10), self._range_iterator):
                 t = threading.Thread(
                     target=self._download_thread, args=(
-                        thread_num, down_range[0], down_range[1])
+                        down_range[0], down_range[1])
                 )
                 self.running_threads.append(t)
                 t.start()
@@ -225,7 +224,7 @@ class Downloader(object):
             for thread in self.running_threads:
                 thread.join()
         else:
-            self._download_thread(thread_id=0)
+            self._download_thread()
         self.uncompress_if_gzip()
         self._running = False
         self._status = DownloadStatus.FINISHED
