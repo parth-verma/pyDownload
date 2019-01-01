@@ -7,10 +7,10 @@ import pyDownload
 
 
 class testPropChange(unittest.TestCase):
-    TEST_URL_1 = 'http://ovh.net/files/1Mio.dat'
-    TEST_URL_2 = 'http://ovh.net/files/1Mb.dat'
-    TEST_URL_3 = 'https://sales2.geico.com/internetsales/dwr/call/plaincall/\
-    PresentationRulesFacade.execute.dwr'
+    TEST_URL_1 = 'https://sample-videos.com/text/Sample-text-file-1000kb.txt'
+    TEST_URL_2 = 'https://sample-videos.com/text/Sample-text-file-500kb.txt'
+    # TEST_URL_3 = 'https://sales2.geico.com/internetsales/dwr/call/plaincall/\
+    # PresentationRulesFacade.execute.dwr'
 
     @classmethod
     def setUpClass(cls):
@@ -35,44 +35,44 @@ class testPropChange(unittest.TestCase):
         self.assertNotEqual(init_range_list, downloader._range_list)
         self.assertNotEqual(init_url, downloader.download_url)
 
-    def test_url_change_2(self):
-        downloader = pyDownload.Downloader(
-            url=self.TEST_URL_3, auto_start=False, multithreaded=True)
-        self.assertEqual(downloader.worker_num, 1)
-        self.assertEqual(downloader.num_splits, 1)
-        downloader.download_url = self.TEST_URL_1
-        self.assertEqual(downloader.worker_num, 1)
-        self.assertEqual(downloader.num_splits, 1)
+    # def test_url_change_2(self):
+    #     downloader = pyDownload.Downloader(
+    #         url=self.TEST_URL_3, auto_start=False, multithreaded=True)
+    #     self.assertEqual(downloader.worker_num, 1)
+    #     self.assertEqual(downloader.num_splits, 1)
+    #     downloader.download_url = self.TEST_URL_1
+    #     self.assertEqual(downloader.worker_num, 1)
+    #     self.assertEqual(downloader.num_splits, 1)
 
-    def test_url_change_3(self):
-        downloader = pyDownload.Downloader(
-            url=self.TEST_URL_1, auto_start=False, multithreaded=True)
-        init_url = downloader.download_url
-        init_filename = downloader.file_name
-        self.assertEqual(downloader.worker_num, 4)
-        self.assertEqual(downloader.num_splits, 10)
-        downloader.download_url = self.TEST_URL_3
-        self.assertIsNone(downloader.download_size)
-        self.assertNotEqual(init_filename, downloader.file_name)
-        self.assertEqual(downloader.worker_num, 1)
-        self.assertEqual(downloader.num_splits, 1)
-        self.assertNotEqual(init_url, downloader.download_url)
-
-    def test_url_change_4(self):
-        downloader = pyDownload.Downloader(
-            url=self.TEST_URL_3, wait_for_download=False, multithreaded=True)
-        self.assertTrue(downloader.is_running)
-        downloader.download_url = self.TEST_URL_1
-        self.assertNotEqual(downloader.download_url, self.TEST_URL_1)
-        while downloader.is_running:
-            time.sleep(1)
+    # def test_url_change_3(self):
+    #     downloader = pyDownload.Downloader(
+    #         url=self.TEST_URL_1, auto_start=False, multithreaded=True)
+    #     init_url = downloader.download_url
+    #     init_filename = downloader.file_name
+    #     self.assertEqual(downloader.worker_num, 4)
+    #     self.assertEqual(downloader.num_splits, 10)
+    #     downloader.download_url = self.TEST_URL_3
+    #     self.assertIsNone(downloader.download_size)
+    #     self.assertNotEqual(init_filename, downloader.file_name)
+    #     self.assertEqual(downloader.worker_num, 1)
+    #     self.assertEqual(downloader.num_splits, 1)
+    #     self.assertNotEqual(init_url, downloader.download_url)
+    #
+    # def test_url_change_4(self):
+    #     downloader = pyDownload.Downloader(
+    #         url=self.TEST_URL_3, wait_for_download=False, multithreaded=True)
+    #     self.assertTrue(downloader.is_running)
+    #     downloader.download_url = self.TEST_URL_1
+    #     self.assertNotEqual(downloader.download_url, self.TEST_URL_1)
+    #     while downloader.is_running:
+    #         time.sleep(1)
 
     def test_num_split_changes(self):
         download = pyDownload.Downloader(
             url=self.TEST_URL_1, auto_start=False, multithreaded=True)
         self.assertFalse(download.is_running)
-        self.assertEqual(download.file_name, '1Mio.dat')
-        self.assertEqual(download.download_size, 1048576)
+        self.assertEqual(download.file_name, 'Sample-text-file-1000kb.txt')
+        self.assertEqual(download.download_size, 1023385)
         self.assertEqual(download.num_splits, 10)
         self.assertEqual(len(download._range_list), 10)
         download.num_splits = 4
@@ -88,7 +88,7 @@ class testPropChange(unittest.TestCase):
         download = pyDownload.Downloader(
             url=self.TEST_URL_1, auto_start=False, multithreaded=True)
         self.assertFalse(download.is_running)
-        self.assertEqual(download.file_name, '1Mio.dat')
+        self.assertEqual(download.file_name, 'Sample-text-file-1000kb.txt')
         download.file_name = 'abc.dat'
         self.assertEqual(download.file_name, 'abc.dat')
 
@@ -96,7 +96,7 @@ class testPropChange(unittest.TestCase):
         download = pyDownload.Downloader(
             url=self.TEST_URL_1, auto_start=False, multithreaded=True)
         self.assertFalse(download.is_running)
-        self.assertEqual(download.file_name, '1Mio.dat')
+        self.assertEqual(download.file_name, 'Sample-text-file-1000kb.txt')
         download.start_download(wait_for_download=False)
         self.assertTrue(download.is_running)
         download.file_name = 'abc.dat'

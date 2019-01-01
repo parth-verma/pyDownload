@@ -8,10 +8,10 @@ from pyDownload import DownloadQueue, DownloadStatus
 
 
 class TestDownloadQueue(unittest.TestCase):
-    TEST_URL_1 = 'http://ovh.net/files/1Mio.dat'
-    TEST_URL_2 = 'http://ovh.net/files/1Mb.dat'
-    TEST_URL_3 = 'https://sales2.geico.com/internetsales/dwr/call/plaincall/\
-        PresentationRulesFacade.execute.dwr'
+    TEST_URL_1 = 'https://sample-videos.com/text/Sample-text-file-1000kb.txt'
+    TEST_URL_2 = 'https://sample-videos.com/text/Sample-text-file-500kb.txt'
+    # TEST_URL_3 = 'https://sales2.geico.com/internetsales/dwr/call/plaincall/\
+    #     PresentationRulesFacade.execute.dwr'
 
     def setUp(self):
         os.makedirs('temp')
@@ -23,6 +23,6 @@ class TestDownloadQueue(unittest.TestCase):
 
     def test_basic(self):
         download_queue = DownloadQueue(
-            [{'url': self.TEST_URL_1}, {'url': self.TEST_URL_2}, {'url': self.TEST_URL_3}])
+            [{'url': self.TEST_URL_1}, {'url': self.TEST_URL_2}])
         while download_queue.status != DownloadStatus.FINISHED:
             time.sleep(1)
